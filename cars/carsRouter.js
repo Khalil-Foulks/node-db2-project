@@ -5,9 +5,10 @@ const db = require("../data/dbConfig.js");
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const { limit = 100, sortby = 'id', sortdir = 'desc' } = req.query;
+    const { sortby = 'id', sortdir = 'desc' } = req.query;
 
     db('cars')
+    .orderBy(sortby, sortdir)
     .then(cars => {
         res.status(200).json({ cars })
     })
@@ -18,8 +19,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const accountsId = req.params.id;
+    const carsId = req.params.id;
 
+    db('cars')
+    .where({ id: carsId})
+    .then(cars => {
+        res.status(200).json({ cars })
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error:error.message })
+    })
 });
 
 router.post('/', (req, res) => {
@@ -38,13 +48,41 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
     const changes = req.body;
-    const accountsId = req.params.id;
+    const carsId = req.params.id;
 
+    db('cars')
+    .where({ id: carsId })
+    .update(changes)
+    .then(count => {
+        if(count){
+            res.status(200).json({ message: 'update succesful', data:changes })
+        } else {
+            res.status(404).json({ message: ' Id not found.'})
+        }
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error:error.message })
+    })
 });
 
 router.delete('/:id', (req, res) => {
-    const accountsId = req.params.id;
+    const carsId = req.params.id;
 
+    db('cars')
+    .where({ id: carsId })
+    .del()
+    .then(count => {
+        if(count){
+            res.status(204).end()
+        } else {
+            res.status(404).json({ message: ' Id not found.'})
+        }
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error:error.message })
+    })
 });
 
 module.exports = router;
