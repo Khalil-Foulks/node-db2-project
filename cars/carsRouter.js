@@ -5,7 +5,7 @@ const db = require("../data/dbConfig.js");
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const { sortby = 'id', sortdir = 'desc' } = req.query;
+    const { sortby = 'car_id', sortdir = 'desc' } = req.query;
 
     db('cars')
     .orderBy(sortby, sortdir)
