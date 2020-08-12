@@ -22,7 +22,7 @@ router.get('/:id', (req, res) => {
     const carsId = req.params.id;
 
     db('cars')
-    .where({ id: carsId})
+    .where({ car_id: carsId})
     .then(cars => {
         res.status(200).json({ cars })
     })
