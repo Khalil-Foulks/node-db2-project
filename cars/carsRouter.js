@@ -51,7 +51,7 @@ router.put('/:id', (req, res) => {
     const carsId = req.params.id;
 
     db('cars')
-    .where({ id: carsId })
+    .where({ car_id: carsId })
     .update(changes)
     .then(count => {
         if(count){
@@ -70,7 +70,7 @@ router.delete('/:id', (req, res) => {
     const carsId = req.params.id;
 
     db('cars')
-    .where({ id: carsId })
+    .where({ car_id: carsId })
     .del()
     .then(count => {
         if(count){
